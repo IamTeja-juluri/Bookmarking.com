@@ -1,8 +1,10 @@
 const {StatusCodes}=require('http-status-codes');
-const { BookMarkService, UserService }=require('../services');
+const { BookMarkService }=require('../services');
 const {BookMark} = require("../models")
 const {SuccessResponse,ErrorResponse}=require('../utils/common');
 const AppError = require('../utils/errors/app-error');
+const { BookmarkCategories } = require('../utils/common/enums');
+
 
 async function createBookMark(req,res){
 
@@ -74,6 +76,21 @@ async function getAllPublicBookmarks(req,res){
 }
 
 
+async function getCategories(req,res){
+    try{
+        const categories=BookmarkCategories;
+        return res
+                  .status(StatusCodes.OK)
+                  .json(categories);
+    }catch(error){
+        ErrorResponse.error=error;
+        return res
+                  .status(error.statusCode)
+                  .json(ErrorResponse)
+    }
+}
+
+
 async function getBookmarksByCategory(req,res){
     try{
         console.log(req.query)
@@ -112,4 +129,4 @@ async function updateBookmark(req,res){
 
 
 
-module.exports={createBookMark,getMyBookmarks,getSpecificBookmark,getAllPublicBookmarks,getBookmarksByCategory,updateBookmark}
+module.exports={createBookMark,getMyBookmarks,getSpecificBookmark,getAllPublicBookmarks,getBookmarksByCategory,updateBookmark,getCategories}

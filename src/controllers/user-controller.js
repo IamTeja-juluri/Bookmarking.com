@@ -16,15 +16,16 @@ const generateToken = (id) =>{
 async function createUser(req,res){
 
     try{
-        const {name,email,password,photo,phone,bio} = req.body
+        const {name,email,password,confirmPassword,phone} = req.body
         const userExists= await User.findOne({email})
         if(userExists)
             throw new AppError(`User with email ${email} is already in use`,StatusCodes.CONFLICT);
         const phoneNumberExists = await User.findOne({phone});
-        console.log("xyz=",phoneNumberExists)
         if(phoneNumberExists && phoneNumberExists.phone === phone)
             throw new AppError(`User with mobileNumber ${phone} is already in use`,StatusCodes.CONFLICT);
-        const user = await UserService.createUser({name,email,password,photo,phone,bio});
+        if(password !== confirmPassword)
+           throw new Error('Passwords do not match',StatusCodes.BAD_REQUEST);
+        const user = await UserService.createUser({name,email,password,phone});
         const token = generateToken(user._id);
         res.cookie("token",token,{
             path:"/",
