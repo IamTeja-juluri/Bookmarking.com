@@ -24,4 +24,4 @@ mongoose
                 console.log(`Server running on port ${ServerConfig.PORT}`)
             })
         })
-        .catch(()=> console.log("error"))
+        .catch((error)=> console.log(error))
