@@ -7,7 +7,6 @@ const {SuccessResponse,ErrorResponse, SendEmail}=require('../utils/common')
 const AppError = require('../utils/errors/app-error')
 const { ServerConfig }=require('../config')
 const crypto = require("crypto")
-const { error } = require('console')
 
 const generateToken = (id) =>{
     return jwt.sign({id},ServerConfig.JWT_SECRET,{expiresIn:"1d"})
@@ -17,6 +16,7 @@ async function createUser(req,res){
 
     try{
         const {name,email,password,confirmPassword,phone} = req.body
+        
         const userExists= await User.findOne({email})
         if(userExists)
             throw new AppError(`User with email ${email} is already in use`,StatusCodes.CONFLICT);
@@ -109,7 +109,7 @@ async function forgotPassword(req,res){
     try{
     
         const {email} = req.body
-        const user = await User.findOne({email})
+        const user = await UserService.getUser({email:email})
 
         if(!user)
             throw new AppError(`User with ${email} doesn't exist,please provide valid email`,StatusCodes.NOT_FOUND);
@@ -188,6 +188,7 @@ async function resetPassword(req,res){
             throw new AppError("Invalid or expired token",StatusCodes.NOT_FOUND)
 
         const user = await User.findOne({_id:userToken.userId})
+        
         user.password = newPassword
 
         await user.save()

@@ -1,7 +1,6 @@
 const {UserRepository} = require("../repositories");
 const {StatusCodes}=require('http-status-codes');
 const AppError = require('../utils/errors/app-error');
-const { data } = require("../utils/common/error-response");
 
 const userRepository = new UserRepository();
 
@@ -14,7 +13,7 @@ async function createUser(data){
     }
 }
 
-async function getUser(){
+async function getUser(data){
     try{
         const user = await userRepository.get(data);
         if(!user)
