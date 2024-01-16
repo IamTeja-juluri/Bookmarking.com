@@ -39,6 +39,26 @@ function validateRegisterUser(req,res,next){
     validateCreateRequest(req,res,next);
 }
 
+function validResetPassword(req,res,next){
+
+    if(!req.body.newPassword){
+        ErrorResponse.message='Something went wrong while resetting a new password ';
+        ErrorResponse.error= new AppError(['New Password not found in the incoming request in the correct form'],StatusCodes.BAD_REQUEST);
+        return res
+              .status(StatusCodes.BAD_REQUEST)
+              .json(ErrorResponse);
+    }
+
+    if(!req.body.confirmNewPassword){
+        ErrorResponse.message='Something went wrong while resetting a new password ';
+        ErrorResponse.error= new AppError(['Confirm New Password not found in the incoming request in the correct form'],StatusCodes.BAD_REQUEST);
+        return res
+              .status(StatusCodes.BAD_REQUEST)
+              .json(ErrorResponse);
+    }
+    next();
+}
+
 module.exports={
-    validateCreateRequest,validateRegisterUser
+    validateCreateRequest,validateRegisterUser,validResetPassword
 }

@@ -7,8 +7,8 @@ const {SuccessResponse,ErrorResponse, SendEmail}=require('../utils/common')
 const AppError = require('../utils/errors/app-error')
 const { ServerConfig }=require('../config')
 const crypto = require("crypto")
+const { error } = require('console')
 
-// Generate Token
 const generateToken = (id) =>{
     return jwt.sign({id},ServerConfig.JWT_SECRET,{expiresIn:"1d"})
   }
@@ -50,6 +50,7 @@ async function createUser(req,res){
 async function loginUser(req,res){
 
     try{
+
         const {email,password} = req.body
         const user= await User.findOne({email})
         if(!user)
@@ -65,7 +66,7 @@ async function loginUser(req,res){
             sameSite: "none",
             secure: true
         });
-        // Create a new object with the "password" field excluded
+
         const sanitizedData = (({ password, ...rest }) => rest)(user._doc);
         SuccessResponse.data=sanitizedData;
         return res
@@ -115,20 +116,16 @@ async function forgotPassword(req,res){
 
         let token = await Token.findOne({userId:user._id})
 
-        // delete if there is any token exists already
         if(token)
             await token.deleteOne()
 
-        // create reset token 
         let resetToken = crypto.randomBytes(32).toString("hex") + user._id
 
-        // Hash Token before saving
         const hashedToken = crypto.
                                     createHash("sha256").
                                     update(resetToken).
                                     digest("hex")
         
-         // Save Token to DB
         await new Token({
             userId : user._id,
             token : hashedToken,
@@ -136,10 +133,8 @@ async function forgotPassword(req,res){
             expiresAt : Date.now() + 30*60*1000
         }).save()
 
-          // construct reset url
         const resetUrl = `${process.env.FRONTEND_URL}/resetpassword/${resetToken}`
 
-        // construct reset url
         const message =`
         <h2>Hello ${user.name}</h2>
         <p>You requested for a password reset</p>
@@ -168,4 +163,46 @@ async function forgotPassword(req,res){
 }
 
 
-module.exports={createUser,loginUser,logout,forgotPassword}
+async function resetPassword(req,res){
+
+    try{
+        const {newPassword,confirmNewPassword} = req.body
+        const {resetToken} = req.params
+
+        if(newPassword !== confirmNewPassword)
+            throw new AppError("Two passwords are not matching",StatusCodes.BAD_REQUEST)
+      
+        const hashedToken = crypto.
+                                    createHash("sha256").
+                                    update(resetToken).
+                                    digest("hex")
+    
+        const userToken = await Token.findOne({
+            token:hashedToken,
+            expiresAt:{
+                $gt:Date.now()
+            }
+        })                  
+        
+        if(!userToken)
+            throw new AppError("Invalid or expired token",StatusCodes.NOT_FOUND)
+
+        const user = await User.findOne({_id:userToken.userId})
+        user.password = newPassword
+
+        await user.save()
+
+        SuccessResponse.data = "Password reset successfull.Please login now"
+        return res
+                  .status(StatusCodes.OK)
+                  .json(SuccessResponse)
+    }catch(error){
+        ErrorResponse.error = error;
+        return res
+                  .status(error.statusCode)
+                  .json(ErrorResponse)
+    }
+
+}
+
+module.exports={createUser,loginUser,logout,forgotPassword,resetPassword}
