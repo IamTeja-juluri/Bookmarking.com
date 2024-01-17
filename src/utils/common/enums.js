@@ -99,12 +99,12 @@ const BookmarkCategories = {
         {
             id : 18,
             name : "UI/UX",
-            imageUrl : "https://res.cloudinary.com/dfai7fktp/image/upload/v1705309538/images_ul6age.jpg"
+            imageUrl : "https://res.cloudinary.com/dfai7fktp/image/upload/v1705309605/images_jenblv.jpg"
         },
          {
             id : 19,
             name : "Graphic Designer",
-            imageUrl : "https://res.cloudinary.com/dfai7fktp/image/upload/v1705309605/images_jenblv.jpg"
+            imageUrl : "https://res.cloudinary.com/dfai7fktp/image/upload/v1705309660/fs0dj0vifqr2istaabkr.jpg"
         },
         {
             id : 20,
