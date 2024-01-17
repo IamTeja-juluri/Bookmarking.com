@@ -29,7 +29,7 @@ const BookmarkCategories = {
          { 
             id: 4,
             name : "Data Science",
-            imageUrl : "https://res.cloudinary.com/dfai7fktp/image/upload/v1705308186/images_dyog9s.jpg"
+            imageUrl : "https://res.cloudinary.com/dfai7fktp/image/upload/v1705308251/images_hc9nel.jpg"
         },   
          {
             id: 5,
@@ -104,7 +104,7 @@ const BookmarkCategories = {
          {
             id : 19,
             name : "Graphic Designer",
-            imageUrl : "https://res.cloudinary.com/dfai7fktp/image/upload/v1705309538/images_ul6age.jpg"
+            imageUrl : "https://res.cloudinary.com/dfai7fktp/image/upload/v1705309605/images_jenblv.jpg"
         },
         {
             id : 20,
