@@ -4,6 +4,7 @@ const {BookMark} = require("../models")
 const {SuccessResponse,ErrorResponse}=require('../utils/common');
 const AppError = require('../utils/errors/app-error');
 const { BookmarkCategories } = require('../utils/common/enums');
+const { Model } = require('mongoose');
 
 
 async function createBookMark(req,res){
@@ -92,12 +93,11 @@ async function getCategories(req,res){
 
 
 async function getBookmarksByCategory(req,res){
+
     try{
-        console.log(req.query)
-        const bookmarks = await BookMarkService.getBookmarks(req.query)
         return res
                   .status(StatusCodes.OK)
-                  .json(bookmarks)
+                  .json(res.paginatedResults)
     }catch(error){
         ErrorResponse.error=error
         return res
@@ -126,6 +126,8 @@ async function updateBookmark(req,res){
     }
 
 }
+
+
 
 
 

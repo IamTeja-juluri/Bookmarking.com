@@ -81,6 +81,23 @@ async function loginUser(req,res){
     
 }
 
+async function loginStatus(req,res){
+
+    const token = req.cookies.token;
+
+    if(!token)
+        return  res.json(false);
+
+    //verify the token and get user id from it
+    const verified = jwt.verify(token,process.env.JWT_SECRET);
+
+    if(verified)
+        return  res.json(true);
+
+    return res.json(false)
+   
+}
+
 async function logout(req,res){
     try{
         res.cookie("token","",{
@@ -206,4 +223,4 @@ async function resetPassword(req,res){
 
 }
 
-module.exports={createUser,loginUser,logout,forgotPassword,resetPassword}
+module.exports={createUser,loginUser,loginStatus,logout,forgotPassword,resetPassword}
