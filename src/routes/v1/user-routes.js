@@ -9,6 +9,7 @@ router.post("/login",UserMiddlewares.validateCreateRequest,UserController.loginU
 router.get("/logout",UserController.logout)
 router.get("/loginstatus",UserController.loginStatus)
 router.post("/forgotPassword",UserController.forgotPassword)
-router.patch("/resetPassword/:resetToken",UserMiddlewares.validResetPassword,UserController.resetPassword)
+router.patch("/changepassword",protect,UserMiddlewares.validatechangePassword,UserController.changePassword)
+router.patch("/resetPassword/:resetToken",UserMiddlewares.validateResetPassword,UserController.resetPassword)
 
 module.exports=router;

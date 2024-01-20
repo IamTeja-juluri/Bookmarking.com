@@ -180,6 +180,34 @@ async function forgotPassword(req,res){
     }
 }
 
+async function changePassword(req,res){
+
+    try{
+        const user = await User.findById(req.user._id)
+        if(!user)
+            throw new AppError(`User not found,Please signup`,StatusCodes.BAD_REQUEST)
+        const {oldPassword,newPassword,confirmNewPassword} = req.body
+         // check if old password matches password in db
+        const isPasswordCorrect = await bcrypt.compare(oldPassword,user.password)
+        if(user && isPasswordCorrect){
+            user.password = newPassword
+            await user.save()
+            SuccessResponse.data="Password changed successfully"
+            return res
+                      .status(StatusCodes.OK)
+                      .json(SuccessResponse)
+        }else
+            throw new AppError('Old password is incorrect',StatusCodes.BAD_REQUEST)
+    }catch(error){
+        console.log(error)
+        ErrorResponse.error = error;
+        return res
+                  .status(error.statusCode)
+                  .json(ErrorResponse)
+    }
+    
+}
+
 
 async function resetPassword(req,res){
 
@@ -224,4 +252,4 @@ async function resetPassword(req,res){
 
 }
 
-module.exports={createUser,loginUser,loginStatus,logout,forgotPassword,resetPassword}
+module.exports={createUser,loginUser,loginStatus,logout,forgotPassword,changePassword,resetPassword}

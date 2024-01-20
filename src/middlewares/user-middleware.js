@@ -39,7 +39,7 @@ function validateRegisterUser(req,res,next){
     validateCreateRequest(req,res,next);
 }
 
-function validResetPassword(req,res,next){
+function validateResetPassword(req,res,next){
 
     if(!req.body.newPassword){
         ErrorResponse.message='Something went wrong while resetting a new password ';
@@ -59,6 +59,43 @@ function validResetPassword(req,res,next){
     next();
 }
 
+function validatechangePassword(req,res,next){
+
+    if(!req.body.oldPassword){
+        ErrorResponse.message='Something went wrong while changing password';
+        ErrorResponse.error= new AppError(['OldPassword not found in the incoming request in the correct form'],StatusCodes.BAD_REQUEST);
+        return res
+              .status(StatusCodes.BAD_REQUEST)
+              .json(ErrorResponse);
+    }
+
+    if(!req.body.newPassword){
+        ErrorResponse.message='Something went wrong while changing password';
+        ErrorResponse.error= new AppError(['NewPassword not found in the incoming request in the correct form'],StatusCodes.BAD_REQUEST);
+        return res
+              .status(StatusCodes.BAD_REQUEST)
+              .json(ErrorResponse);
+    }
+
+    if(!req.body.confirmNewPassword){
+        ErrorResponse.message='Something went wrong while changing password';
+        ErrorResponse.error= new AppError(['ConfirmNewPassword not found in the incoming request in the correct form'],StatusCodes.BAD_REQUEST);
+        return res
+              .status(StatusCodes.BAD_REQUEST)
+              .json(ErrorResponse);
+    }
+
+    if(req.body.newPassword !== req.body.confirmNewPassword){
+        ErrorResponse.message='Something went wrong while changing password';
+        ErrorResponse.error= new AppError(['NewPassword and ConfirmNewPassword are not matching'],StatusCodes.BAD_REQUEST);
+        return res
+              .status(StatusCodes.BAD_REQUEST)
+              .json(ErrorResponse);
+    }
+
+    next();
+}
+
 module.exports={
-    validateCreateRequest,validateRegisterUser,validResetPassword
+    validateCreateRequest,validateRegisterUser,validateResetPassword,validatechangePassword
 }
