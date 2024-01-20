@@ -1,7 +1,6 @@
 const {BookMarkRepository} = require("../repositories");
 const {StatusCodes}=require('http-status-codes');
 const AppError = require('../utils/errors/app-error');
-
 const bookMarkRepository = new BookMarkRepository();
 
 async function createBookMark(data){

@@ -13,7 +13,7 @@ async function createCategory(data){
     }
 }
 
-async function getCategories(){
+async function getAllCategories(){
     try{
         const categories = await categoryRepository.getAll();
         return categories;
@@ -22,6 +22,15 @@ async function getCategories(){
     }
 }
 
+async function searchCategories(data){
+    try{
+        const categories = await categoryRepository.searchCategories(data);
+        return categories;
+    }catch(error){
+        throw new AppError('Cannot find a new category Object',StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+}
+
 module.exports={
-    createCategory,getCategories
+    createCategory,getAllCategories,searchCategories
 }

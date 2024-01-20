@@ -27,9 +27,23 @@ async function createCategory(req,res){
     }
 }
 
-async function getCategories(req,res){
+async function getAllCategories(req,res){
     try{
-        const categories=await CategoryService.getCategories();
+        const categories=await CategoryService.getAllCategories();
+        return res
+                  .status(StatusCodes.OK)
+                  .json(categories);
+    }catch(error){
+        ErrorResponse.error=error;
+        return res
+                  .status(error.statusCode)
+                  .json(ErrorResponse)
+    }
+}
+
+async function searchCategories(req,res){
+    try{
+        const categories=await CategoryService.searchCategories(req);
         return res
                   .status(StatusCodes.OK)
                   .json(categories);
@@ -42,5 +56,5 @@ async function getCategories(req,res){
 }
 
 module.exports={
-    createCategory,getCategories
+    createCategory,getAllCategories,searchCategories
 }
