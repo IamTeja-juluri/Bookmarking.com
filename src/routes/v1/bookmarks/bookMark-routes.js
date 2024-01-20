@@ -6,5 +6,6 @@ const {PaginatedResultsMiddlewares} = require('../../../middlewares');
 const { BookMark } = require("../../../models");
 router.post('/new',protect,BookMarkController.createBookMark)
 router.get('/find',PaginatedResultsMiddlewares.paginatedResults(BookMark),BookMarkController.getAnyBookmarksByQuery)
+router.get('/latest',BookMarkController.getLatestBookmarks)
 router.patch('/',protect,BookMarkController.updateBookmark)
 module.exports=router;

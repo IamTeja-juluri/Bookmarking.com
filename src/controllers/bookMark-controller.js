@@ -26,6 +26,22 @@ async function createBookMark(req,res){
     }
 }
 
+async function getLatestBookmarks(req,res){
+
+    try{
+        const bookmarks = await BookMarkService.getLatestBookmarks(req.query)
+        SuccessResponse.data = bookmarks
+        return res
+                  .status(StatusCodes.OK)
+                  .json(SuccessResponse)
+    }catch(error){
+        ErrorResponse.error=error
+        return res
+                  .status(error.statusCode)
+                  .json(ErrorResponse)
+    }
+}
+
 async function getAnyBookmarksByQuery(req,res){
     try{
         return res
@@ -38,6 +54,7 @@ async function getAnyBookmarksByQuery(req,res){
                   .json(ErrorResponse)
     }
 }
+
 
 async function updateBookmark(req,res){
     try{
@@ -58,4 +75,4 @@ async function updateBookmark(req,res){
     }
 }
 
-module.exports={createBookMark,getAnyBookmarksByQuery,updateBookmark}
+module.exports={createBookMark,getAnyBookmarksByQuery,getLatestBookmarks,updateBookmark}

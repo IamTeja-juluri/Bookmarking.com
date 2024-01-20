@@ -27,6 +27,20 @@ async function getBookmarks(data){
 
 }
 
+async function getLatestBookmarks(data){
+    try{
+        const bookmarks = await bookMarkRepository.getLatestBookmarks(data); 
+        const sanitizedDataArray = bookmarks.map(bookmark => {
+            const { _id, userId, __v, ...rest } = bookmark._doc;
+            return rest;
+          });
+        return sanitizedDataArray;
+    }catch(error){
+        throw new AppError('Cannot get all bookmarks',StatusCodes.BAD_REQUEST)
+    }
+
+}
+
 module.exports={
-    createBookMark,getBookmarks
+    createBookMark,getBookmarks,getLatestBookmarks
 }

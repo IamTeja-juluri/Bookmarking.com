@@ -1,6 +1,6 @@
 const {ErrorResponse}=require('../utils/common');
 
-function paginatedResults(model){
+function paginatedResults(model,sortFilter){
 
     return async(req,res,next)=>{
         try{

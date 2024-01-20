@@ -48,7 +48,7 @@ const BookmarkCategories = {
         },    
          {
             id: 8,
-            name : "Web Development",
+            name : "Software Development",
             imageUrl : "https://res.cloudinary.com/dfai7fktp/image/upload/v1705308644/images_zh08yp.jpg"
         },    
         {
