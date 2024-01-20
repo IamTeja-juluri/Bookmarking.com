@@ -4,9 +4,7 @@ const {BookMark} = require("../models")
 const {SuccessResponse,ErrorResponse}=require('../utils/common');
 const AppError = require('../utils/errors/app-error');
 
-
 async function createBookMark(req,res){
-
     try{
         const authorName=req.user.name
         const {userId,link,collectionName,bookMarkName,bookmarkType,category,photo} = req.body
@@ -26,11 +24,9 @@ async function createBookMark(req,res){
                   .status(error.statusCode)
                   .json(ErrorResponse);  
     }
-
 }
 
 async function getAnyBookmarksByQuery(req,res){
-
     try{
         return res
                   .status(StatusCodes.OK)
@@ -43,31 +39,23 @@ async function getAnyBookmarksByQuery(req,res){
     }
 }
 
-
 async function updateBookmark(req,res){
-
     try{
-        
         const bookmark = await BookMarkService.getBookmarks(req.query)
-    
         const newBookmark = {...bookmark , ...req.body};
-
         if(bookmark.userId !== req.user._id)
             throw new Error("You are not authorised to perform this action",StatusCodes.UNAUTHORIZED)
-
-
-
+        await newBookmark.save()
+        SuccessResponse.data = "BookMark Updated Successfully"
+        return res
+                  .status(StatusCodes.OK)
+                  .json(SuccessResponse)
     }catch(error){
         ErrorResponse.error=error
         return res
                   .status(error.statusCode)
                   .json(ErrorResponse)
     }
-
 }
-
-
-
-
 
 module.exports={createBookMark,getAnyBookmarksByQuery,updateBookmark}

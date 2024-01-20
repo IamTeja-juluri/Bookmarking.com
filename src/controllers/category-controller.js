@@ -4,9 +4,7 @@ const {Category} = require("../models")
 const {SuccessResponse,ErrorResponse}=require('../utils/common');
 const AppError = require('../utils/errors/app-error');
 
-
 async function createCategory(req,res){
-
     try{
         const authorName=req.user.name
         const userId = req.user._id
@@ -27,7 +25,6 @@ async function createCategory(req,res){
                   .status(error.statusCode)
                   .json(ErrorResponse);  
     }
-
 }
 
 async function getCategories(req,res){

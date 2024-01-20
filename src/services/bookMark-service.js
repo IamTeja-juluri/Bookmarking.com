@@ -28,8 +28,6 @@ async function getBookmarks(data){
 
 }
 
-
-
 module.exports={
     createBookMark,getBookmarks
 }

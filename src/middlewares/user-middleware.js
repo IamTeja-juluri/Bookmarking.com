@@ -20,7 +20,6 @@ function validateCreateRequest(req,res,next){
     next();  //controller is the next middleware
 };
 
-
 function validateRegisterUser(req,res,next){
     if(!req.body.name){
         ErrorResponse.message='Something went wrong while creating a new state ';
@@ -40,7 +39,6 @@ function validateRegisterUser(req,res,next){
 }
 
 function validateResetPassword(req,res,next){
-
     if(!req.body.newPassword){
         ErrorResponse.message='Something went wrong while resetting a new password ';
         ErrorResponse.error= new AppError(['New Password not found in the incoming request in the correct form'],StatusCodes.BAD_REQUEST);
@@ -48,7 +46,6 @@ function validateResetPassword(req,res,next){
               .status(StatusCodes.BAD_REQUEST)
               .json(ErrorResponse);
     }
-
     if(!req.body.confirmNewPassword){
         ErrorResponse.message='Something went wrong while resetting a new password ';
         ErrorResponse.error= new AppError(['Confirm New Password not found in the incoming request in the correct form'],StatusCodes.BAD_REQUEST);
@@ -60,7 +57,6 @@ function validateResetPassword(req,res,next){
 }
 
 function validatechangePassword(req,res,next){
-
     if(!req.body.oldPassword){
         ErrorResponse.message='Something went wrong while changing password';
         ErrorResponse.error= new AppError(['OldPassword not found in the incoming request in the correct form'],StatusCodes.BAD_REQUEST);
@@ -68,7 +64,6 @@ function validatechangePassword(req,res,next){
               .status(StatusCodes.BAD_REQUEST)
               .json(ErrorResponse);
     }
-
     if(!req.body.newPassword){
         ErrorResponse.message='Something went wrong while changing password';
         ErrorResponse.error= new AppError(['NewPassword not found in the incoming request in the correct form'],StatusCodes.BAD_REQUEST);
@@ -76,7 +71,6 @@ function validatechangePassword(req,res,next){
               .status(StatusCodes.BAD_REQUEST)
               .json(ErrorResponse);
     }
-
     if(!req.body.confirmNewPassword){
         ErrorResponse.message='Something went wrong while changing password';
         ErrorResponse.error= new AppError(['ConfirmNewPassword not found in the incoming request in the correct form'],StatusCodes.BAD_REQUEST);
@@ -84,7 +78,6 @@ function validatechangePassword(req,res,next){
               .status(StatusCodes.BAD_REQUEST)
               .json(ErrorResponse);
     }
-
     if(req.body.newPassword !== req.body.confirmNewPassword){
         ErrorResponse.message='Something went wrong while changing password';
         ErrorResponse.error= new AppError(['NewPassword and ConfirmNewPassword are not matching'],StatusCodes.BAD_REQUEST);
@@ -92,7 +85,6 @@ function validatechangePassword(req,res,next){
               .status(StatusCodes.BAD_REQUEST)
               .json(ErrorResponse);
     }
-
     next();
 }
 

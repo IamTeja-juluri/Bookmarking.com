@@ -1,4 +1,3 @@
-const { data } = require('../utils/common/error-response');
 const AppError = require('../utils/errors/app-error');
 const {StatusCodes}=require('http-status-codes');
 
@@ -28,7 +27,6 @@ class CrudRepository{
         const response=await this.model.find(data);
         if(!response)
             throw new AppError("Not able to find resource",StatusCodes.NOT_FOUND);
-        console.log(response)
         return response;
     }
 
@@ -55,7 +53,7 @@ class CrudRepository{
         console.log(response);
         return response;
     }
-
+    
 }
 
 module.exports=CrudRepository;

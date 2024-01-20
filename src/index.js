@@ -11,11 +11,7 @@ app.use(cookieParser())
 app.use(express.urlencoded({extended:true}))
 app.use(bodyParser.json())
 app.use(cors())
-
-
 app.use('/api',apiRoutes)
-
-
 //connect to db
 mongoose
         .connect(ServerConfig.MONGO_URI)
