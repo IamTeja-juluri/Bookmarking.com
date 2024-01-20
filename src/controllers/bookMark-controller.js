@@ -29,21 +29,6 @@ async function createBookMark(req,res){
 
 }
 
-async function getMyBookmarks(req,res){
-    try{
-        const bookmarks =await BookMarkService.getBookmarks({userId:req.user._id});
-        return res 
-                  .status(StatusCodes.OK)
-                  .json(bookmarks); 
-    }catch(error){
-        ErrorResponse.error=error;
-        return res
-                  .status(error.statusCode)
-                  .json(ErrorResponse)
-    }
-
-}
-
 async function getAnyBookmarksByQuery(req,res){
 
     try{
@@ -69,7 +54,7 @@ async function updateBookmark(req,res){
 
         if(bookmark.userId !== req.user._id)
             throw new Error("You are not authorised to perform this action",StatusCodes.UNAUTHORIZED)
-        
+
 
 
     }catch(error){
@@ -85,4 +70,4 @@ async function updateBookmark(req,res){
 
 
 
-module.exports={createBookMark,getMyBookmarks,getAnyBookmarksByQuery,updateBookmark}
+module.exports={createBookMark,getAnyBookmarksByQuery,updateBookmark}
