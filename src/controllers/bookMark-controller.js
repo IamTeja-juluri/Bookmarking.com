@@ -3,8 +3,6 @@ const { BookMarkService }=require('../services');
 const {BookMark} = require("../models")
 const {SuccessResponse,ErrorResponse}=require('../utils/common');
 const AppError = require('../utils/errors/app-error');
-const { BookmarkCategories } = require('../utils/common/enums');
-const { Model } = require('mongoose');
 
 
 async function createBookMark(req,res){
@@ -46,53 +44,7 @@ async function getMyBookmarks(req,res){
 
 }
 
-
-async function getSpecificBookmark(req,res){
-    try{
-        const bookmarks =await BookMarkService.getSpecificBookmark(req.params.id);
-        return res 
-                  .status(StatusCodes.OK)
-                  .json(bookmarks); 
-    }catch(error){
-        ErrorResponse.error=error;
-        return res
-                  .status(error.statusCode)
-                  .json(ErrorResponse)
-    }
-
-}
-
-async function getAllPublicBookmarks(req,res){
-    try{
-        const bookmarks= await BookMarkService.getBookmarks(req.query)
-        return res
-                  .status(StatusCodes.OK)
-                  .json(bookmarks)
-    }catch(error){
-        ErrorResponse.error=error
-        return res
-                  .status(error.statusCode)
-                  .json(ErrorResponse)
-    }
-}
-
-
-async function getCategories(req,res){
-    try{
-        const categories=BookmarkCategories;
-        return res
-                  .status(StatusCodes.OK)
-                  .json(categories);
-    }catch(error){
-        ErrorResponse.error=error;
-        return res
-                  .status(error.statusCode)
-                  .json(ErrorResponse)
-    }
-}
-
-
-async function getBookmarksByCategory(req,res){
+async function getAnyBookmarksByQuery(req,res){
 
     try{
         return res
@@ -114,8 +66,10 @@ async function updateBookmark(req,res){
         const bookmark = await BookMarkService.getBookmarks(req.query)
     
         const newBookmark = {...bookmark , ...req.body};
+
         if(bookmark.userId !== req.user._id)
             throw new Error("You are not authorised to perform this action",StatusCodes.UNAUTHORIZED)
+        
 
 
     }catch(error){
@@ -131,4 +85,4 @@ async function updateBookmark(req,res){
 
 
 
-module.exports={createBookMark,getMyBookmarks,getSpecificBookmark,getAllPublicBookmarks,getBookmarksByCategory,updateBookmark,getCategories}
+module.exports={createBookMark,getMyBookmarks,getAnyBookmarksByQuery,updateBookmark}

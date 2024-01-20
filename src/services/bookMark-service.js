@@ -28,17 +28,8 @@ async function getBookmarks(data){
 
 }
 
-async function getSpecificBookmark(data){
-    try{
-        const bookmarks = await bookMarkRepository.getOne(data); 
-        return bookmarks;
-    }catch(error){
-        throw new AppError('Cannot get all bookmarks',StatusCodes.BAD_REQUEST)
-    }
-
-}
 
 
 module.exports={
-    createBookMark,getBookmarks,getSpecificBookmark
+    createBookMark,getBookmarks
 }

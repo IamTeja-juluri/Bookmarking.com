@@ -1,6 +1,4 @@
-const { StatusCodes }=require('http-status-codes');
 const {ErrorResponse}=require('../utils/common');
-const AppError = require('../utils/errors/app-error');
 
 function paginatedResults(model){
 
@@ -28,7 +26,7 @@ function paginatedResults(model){
             }   
             results.results=await model.find(newQuery)
                                                     .skip(startIndex)
-                                                    .limit(endIndex-startIndex)
+                                                    .limit(limit)
                                                     .exec()
             res.paginatedResults=results
             next();

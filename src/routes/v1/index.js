@@ -1,12 +1,13 @@
 const express= require('express');
 const { InfoController }=require('../../controllers')
-const BookMarkRoutes = require("./bookMark-routes")
+const BookMarkRoutes = require("./bookmarks/bookMark-routes")
 const UserRoutes = require("./user-routes")
+const CategoryRoutes = require("./category-routes")
 
 const router=express.Router();
 
 router.get('/info',InfoController.info)
 router.use('/user',UserRoutes)
-router.use('/bookmark',BookMarkRoutes)
+router.use('/category',CategoryRoutes)
 
 module.exports=router
