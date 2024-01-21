@@ -64,7 +64,9 @@ async function loginUser(req,res){
             secure: true
         });
         const sanitizedData = (({ password, ...rest }) => rest)(user._doc);
-        SuccessResponse.data=sanitizedData;
+        // Include the token in the response data
+        sanitizedData.accessToken=token
+        SuccessResponse.data=sanitizedData
         return res
                 .status(StatusCodes.OK)
                 .json(SuccessResponse)
