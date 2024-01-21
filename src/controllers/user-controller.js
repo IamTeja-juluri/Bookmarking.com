@@ -7,7 +7,10 @@ const {SuccessResponse,ErrorResponse, SendEmail}=require('../utils/common')
 const AppError = require('../utils/errors/app-error')
 const { ServerConfig }=require('../config')
 const crypto = require("crypto")
-const { use } = require('../routes/v1/user-routes')
+const cloudinary = require("cloudinary").v2
+const { fileSizeFormatter } = require("../utils/common/fileUpload")
+
+
 
 const generateToken = (id) =>{
     return jwt.sign({id},ServerConfig.JWT_SECRET,{expiresIn:"1d"})
@@ -220,22 +223,33 @@ async function resetPassword(req,res){
 
 async function updateUserProfile(req,res){
     try{
-        const user = await User.findById(req.user._id)
-        if(!user)
-            throw new AppError(`User not found`,StatusCodes.BAD_REQUEST)
-        const {name,email,photo,phone,bio} = user;
-        if(email !== req.body.email)
-            throw new AppError(`You cannot update your email`,StatusCodes.FORBIDDEN)
-        user.email = email
-        user.name = req.body.name || name
-        user.photo = req.body.photo || photo
-        user.phone = req.body.phone || phone
-        user.bio = req.body.bio || bio
-        const updatedUserProfile = await user.save()
-        SuccessResponse.data=updatedUserProfile
-        return res
-                  .status(StatusCodes.OK)
-                  .json(updatedUserProfile)
+        const {name,phone,bio} = req.body
+
+        let fileData = {}
+        if(req.file){
+            let uploadedFile
+            try{
+                uploadedFile = await cloudinary.uploader.upload(req.file.path,{
+                folder: "usersProfilePictures", resource_type : "image"
+            })}catch(error){
+                throw new AppError("Image could not be uploaded",StatusCodes.EXPECTATION_FAILED)
+            }   
+            fileData = {
+                fileName : req.file.originalname,
+                filePath : uploadedFile.secure_url,
+                fileType : req.file.mimetype,
+                fileSize : fileSizeFormatter(req.file.size,2)
+            }
+        }
+        const updatedUserProfile = await User.findByIdAndUpdate({_id:req.user._id},{
+            name,phone,bio,image : Object.keys(fileData).length === 0 ? fileData : fileData  
+          },{
+            new : true,
+            runValidators : true
+          }).select("-password")
+          return res
+                    .status(StatusCodes.OK)
+                    .json(updatedUserProfile)
     }catch(error){
         ErrorResponse.error = error;
         return res

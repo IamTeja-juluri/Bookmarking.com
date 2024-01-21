@@ -22,10 +22,9 @@ const userSchema = mongoose.Schema({
         minLength : [6,"Password must be atleast 6 characters"],
         maxLength : [20,"Password cannot be more than 25 characters"]
     },
-    photo : {
-        type : String,
-        required : [true,"Please add your photo"],
-        default : "https://i.ibb.co/4pDNDk1/avatar.png"
+    image : {
+        type : Object,
+        default : {}
     },
     phone : {
         type : String,
