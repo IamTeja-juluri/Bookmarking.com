@@ -10,7 +10,7 @@ const bookMarkSchema = mongoose.Schema({
         required : [true, "Please add your link"],
         trim : true // removes space in email
     },
-    bookMarkName : {
+    bookmarkName : {
         type : String,
         required : [true,"please provide the name for your bookmark"],
     },

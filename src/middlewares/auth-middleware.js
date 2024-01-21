@@ -7,10 +7,12 @@ const {ServerConfig} = require("../config")
 
 const protect = async(req,res,next)=>{
    try{
-        const token = req.cookies.token
+        //const token = req.cookies.token
+        const token = req.headers.authorization.split(' ');
+        console.log(token[1]);
         if(!token)
             throw new AppError("Unauthorised,please login",StatusCodes.UNAUTHORIZED)
-        const decoded = jwt.verify(token,ServerConfig.JWT_SECRET)
+        const decoded = jwt.verify(token[1],ServerConfig.JWT_SECRET)
         const user = await User.findOne({_id:decoded.id}).select("-password")
         if(!user)
             throw new AppError("User Not found",StatusCodes.UNAUTHORIZED)
