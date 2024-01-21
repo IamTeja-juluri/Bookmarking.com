@@ -6,9 +6,6 @@ const AppError = require('../utils/errors/app-error');
 
 async function createBookMark(req,res){
     try{
-        console.log(req.body);
-        // console.log(req.body);
-        // console.log(req.user);
         if(!req.user)
             throw new AppError(`Please login to create a bookmark`,StatusCodes.BAD_REQUEST)
         const authorName=req.user.name

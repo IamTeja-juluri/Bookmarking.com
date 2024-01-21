@@ -1,9 +1,7 @@
 const express =  require("express")
-const { UserController } = require("../../controllers");
-const {UserMiddlewares} = require("../../middlewares");
-const protect = require("../../middlewares/auth-middleware");
-const router = express.Router();
-router.use(express.json());
+const { UserController } = require("../../controllers")
+const {UserMiddlewares} = require("../../middlewares")
+const protect = require("../../middlewares/auth-middleware")
 const router = express.Router()
 router.use(express.json())
 router.post("/register",UserMiddlewares.validateRegisterUser,UserController.createUser)
