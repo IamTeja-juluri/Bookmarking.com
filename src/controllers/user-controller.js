@@ -247,9 +247,10 @@ async function updateUserProfile(req,res){
             new : true,
             runValidators : true
           }).select('-password -createdAt -updatedAt -__v -_id')
+          SuccessResponse.data = updatedUserProfile
           return res
                     .status(StatusCodes.OK)
-                    .json(updatedUserProfile)
+                    .json(SuccessResponse)
     }catch(error){
         ErrorResponse.error = error;
         return res
@@ -284,9 +285,10 @@ async function updateUserProfilePicture(req,res){
             new : true,
             runValidators : true
           }).select("-password")
+          SuccessResponse.data = updatedUserProfile
           return res
                     .status(StatusCodes.OK)
-                    .json(updatedUserProfile)
+                    .json(SuccessResponse)
     }catch(error){
         ErrorResponse.error = error;
         return res

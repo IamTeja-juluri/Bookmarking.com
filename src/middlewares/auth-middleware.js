@@ -15,7 +15,8 @@ const protect = async(req,res,next)=>{
         if(!user)
             throw new AppError("User Not found",StatusCodes.UNAUTHORIZED)
         req.user = user
-        console.log(req.user)
+        req.user.accessToken=token[1]
+        console.log("ru=",req.user)
         next()
     }catch(error){
         ErrorResponse.error=error;
