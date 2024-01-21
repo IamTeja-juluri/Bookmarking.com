@@ -7,6 +7,7 @@ const {SuccessResponse,ErrorResponse, SendEmail}=require('../utils/common')
 const AppError = require('../utils/errors/app-error')
 const { ServerConfig }=require('../config')
 const crypto = require("crypto")
+const { use } = require('../routes/v1/user-routes')
 
 const generateToken = (id) =>{
     return jwt.sign({id},ServerConfig.JWT_SECRET,{expiresIn:"1d"})
@@ -217,4 +218,30 @@ async function resetPassword(req,res){
     }
 }
 
-module.exports={createUser,loginUser,loginStatus,logout,forgotPassword,changePassword,resetPassword}
+async function updateUserProfile(req,res){
+    try{
+        const user = await User.findById(req.user._id)
+        if(!user)
+            throw new AppError(`User not found`,StatusCodes.BAD_REQUEST)
+        const {name,email,photo,phone,bio} = user;
+        if(email !== req.body.email)
+            throw new AppError(`You cannot update your email`,StatusCodes.FORBIDDEN)
+        user.email = email
+        user.name = req.body.name || name
+        user.photo = req.body.photo || photo
+        user.phone = req.body.phone || phone
+        user.bio = req.body.bio || bio
+        const updatedUserProfile = await user.save()
+        SuccessResponse.data=updatedUserProfile
+        return res
+                  .status(StatusCodes.OK)
+                  .json(updatedUserProfile)
+    }catch(error){
+        ErrorResponse.error = error;
+        return res
+                  .status(error.statusCode)
+                  .json(ErrorResponse)
+    }
+}
+
+module.exports={createUser,loginUser,loginStatus,logout,forgotPassword,changePassword,resetPassword,updateUserProfile}
