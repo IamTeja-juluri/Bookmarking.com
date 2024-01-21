@@ -10,12 +10,12 @@ async function createBookMark(req,res){
             throw new AppError(`Please login to create a bookmark`,StatusCodes.BAD_REQUEST)
         const authorName=req.user.name
         const userId = req.user._id
-        const {link,collectionName,bookMarkName,bookmarkType,category,photo} = req.body
+        const {link,bookMarkName,bookmarkType,category,photo} = req.body
         const bookmarkAlreadyExists = await BookMark.findOne({link});
         if(bookmarkAlreadyExists && bookmarkAlreadyExists.link === link && bookmarkAlreadyExists.bookMarkType == "Public")
             throw new AppError(`Bookmark already exists with name ${bookmarkAlreadyExists.bookMarkName}`,StatusCodes.CONFLICT)
         const bookMark = await BookMarkService.createBookMark({
-            userId,authorName,link,collectionName,bookMarkName,bookmarkType,category,photo
+            userId,authorName,link,bookMarkName,bookmarkType,category,photo
         });
         SuccessResponse.data=bookMark;
        return res

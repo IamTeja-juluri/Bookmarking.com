@@ -10,12 +10,6 @@ const bookMarkSchema = mongoose.Schema({
         required : [true, "Please add your link"],
         trim : true // removes space in email
     },
-    collectionName : {
-        type : String,
-        required : [true,"please provide the name for collection"],
-        minLength : [2,"Password must be atleast 2 characters"],
-        maxLength : [30,"Password cannot be more than 25 characters"]
-    },
     bookMarkName : {
         type : String,
         required : [true,"please provide the name for your bookmark"],
