@@ -50,6 +50,23 @@ async function createUser(req,res){
 
 }
 
+async function userInfo(req,res){
+    try{
+        console.log(req.user)
+       const user = await User.findOne({_id:req.user._id}).select('-password -createdAt -updatedAt -__v -_id')
+       SuccessResponse.data = user
+       return res
+                .status(StatusCodes.OK)
+                .json(SuccessResponse)
+
+    }catch(error){
+        ErrorResponse.error=error;
+        return res
+              .status(error.statusCode)
+              .json(ErrorResponse);  
+    }
+}
+
 async function loginUser(req,res){
     try{
         const {email,password} = req.body
@@ -167,7 +184,6 @@ async function changePassword(req,res){
         if(!user)
             throw new AppError(`User not found,Please signup`,StatusCodes.BAD_REQUEST)
         const {oldPassword,newPassword} = req.body
-         // check if old password matches password in db
         const isPasswordCorrect = await bcrypt.compare(oldPassword,user.password)
         if(user && isPasswordCorrect){
             user.password = newPassword
@@ -222,27 +238,48 @@ async function resetPassword(req,res){
 }
 
 async function updateUserProfile(req,res){
+
     try{
         const {name,phone,bio} = req.body
+        const updatedUserProfile = await User.findByIdAndUpdate({_id:req.user._id},{
+            name,phone,bio
+          },{
+            new : true,
+            runValidators : true
+          }).select('-password -createdAt -updatedAt -__v -_id')
+          return res
+                    .status(StatusCodes.OK)
+                    .json(updatedUserProfile)
+    }catch(error){
+        ErrorResponse.error = error;
+        return res
+                  .status(error.statusCode)
+                  .json(ErrorResponse)
+    }
 
+}
+
+async function updateUserProfilePicture(req,res){
+
+    try{
         let fileData = {}
         if(req.file){
             let uploadedFile
-            try{
-                uploadedFile = await cloudinary.uploader.upload(req.file.path,{
-                folder: "usersProfilePictures", resource_type : "image"
-            })}catch(error){
-                throw new AppError("Image could not be uploaded",StatusCodes.EXPECTATION_FAILED)
-            }   
-            fileData = {
-                fileName : req.file.originalname,
-                filePath : uploadedFile.secure_url,
-                fileType : req.file.mimetype,
-                fileSize : fileSizeFormatter(req.file.size,2)
-            }
+        try{
+            uploadedFile = await cloudinary.uploader.upload(req.file.path,{
+            folder: "usersProfilePictures", resource_type : "image"
+        })}catch(error){
+            throw new AppError("Image could not be uploaded",StatusCodes.EXPECTATION_FAILED)
+        }   
+        fileData = {
+            fileName : req.file.originalname,
+            filePath : uploadedFile.secure_url,
+            fileType : req.file.mimetype,
+            fileSize : fileSizeFormatter(req.file.size,2)
+        }
         }
         const updatedUserProfile = await User.findByIdAndUpdate({_id:req.user._id},{
-            name,phone,bio,image : Object.keys(fileData).length === 0 ? fileData : fileData  
+            image : fileData   
           },{
             new : true,
             runValidators : true
@@ -258,4 +295,5 @@ async function updateUserProfile(req,res){
     }
 }
 
-module.exports={createUser,loginUser,loginStatus,logout,forgotPassword,changePassword,resetPassword,updateUserProfile}
+
+module.exports={createUser,loginUser,userInfo,loginStatus,logout,forgotPassword,changePassword,resetPassword,updateUserProfile,updateUserProfilePicture}

@@ -7,7 +7,6 @@ const {ServerConfig} = require("../config")
 
 const protect = async(req,res,next)=>{
    try{
-        //const token = req.cookies.token
         const token = req.headers.authorization.split(' ');
         if(!token)
             throw new AppError("Unauthorised,please login",StatusCodes.UNAUTHORIZED)
@@ -16,6 +15,7 @@ const protect = async(req,res,next)=>{
         if(!user)
             throw new AppError("User Not found",StatusCodes.UNAUTHORIZED)
         req.user = user
+        console.log(req.user)
         next()
     }catch(error){
         ErrorResponse.error=error;

@@ -17,11 +17,9 @@ app.use("/uploads",express.static(path.join(__dirname,"uploads")))
 app.use('/api',apiRoutes)
 
 mongoose
-        .connect(ServerConfig.MONGO_URI)
-        .then(()=>{
-            app.listen(ServerConfig.PORT,()=>{
-                console.log(path.join(__dirname))
-                console.log(`Server running on port ${ServerConfig.PORT}`)
-            })
-        })
-        .catch((error)=> console.log(error))
+    .connect(ServerConfig.MONGO_URI)
+    .then(()=>{
+     app.listen(ServerConfig.PORT,()=>{
+        console.log(`Server running on port ${ServerConfig.PORT}`)
+   })
+}).catch((error)=> console.log(error))
